@@ -1,4 +1,4 @@
-package com.dalimao.mytaxi;
+package com.maicon.mytaxi;
 
 import org.junit.Test;
 

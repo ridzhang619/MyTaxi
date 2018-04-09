@@ -1,4 +1,4 @@
-package com.dalimao.mytaxi.splash;
+package com.maicon.mytaxi.splash;
 
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
