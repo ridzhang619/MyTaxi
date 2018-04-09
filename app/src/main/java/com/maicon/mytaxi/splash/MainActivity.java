@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.dalimao.mytaxi.R;
+import com.maicon.mytaxi.splash.account.PhoneInputDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
      * 显示手机输入框
      */
     private void showPhoneInputDialog() {
-
+        PhoneInputDialog dialog = new PhoneInputDialog(MainActivity.this);
+        dialog.show();
 
     }
 }
