@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dalimao.mytaxi.R;
+import com.maicon.mytaxi.R;
 import com.maicon.mytaxi.splash.common.utils.FormatUtils;
 
 /**
@@ -77,6 +77,8 @@ public class PhoneInputDialog extends Dialog{
                 dismiss();
                 String phone  =  mPhone.getText().toString();
                 // todo:显示输入验证码的输入框
+                SmsCodeDialog smsCodeDialog = new SmsCodeDialog(getContext(),phone);
+                smsCodeDialog.show();
             }
         });
 
@@ -94,7 +96,7 @@ public class PhoneInputDialog extends Dialog{
 
     private void checkPhone() {
         String phone = mPhone.getText().toString();
-        boolean legal = FormatUtils.checkMobile(phone)
+        boolean legal = FormatUtils.checkMobile(phone);
         mButton.setEnabled(legal);
     }
 }

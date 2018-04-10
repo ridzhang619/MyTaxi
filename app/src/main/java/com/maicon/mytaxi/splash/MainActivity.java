@@ -3,7 +3,7 @@ package com.maicon.mytaxi.splash;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.dalimao.mytaxi.R;
+import com.maicon.mytaxi.R;
 import com.maicon.mytaxi.splash.account.PhoneInputDialog;
 
 public class MainActivity extends AppCompatActivity {
