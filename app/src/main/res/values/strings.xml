@@ -6,7 +6,7 @@
     <string name="et_phone_hint">请输入手机号码</string>
     <string name="btn_next">下一步</string>
     <string name="template_text">正在向%s发送短信验证码</string>
-    <string name="count_format_text">{millisUntilFinished/1000}秒后重新发送</string>
+    <string name="count_format_text">秒后重新发送</string>
 
 
 </resources>

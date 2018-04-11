@@ -2,6 +2,7 @@ package com.maicon.mytaxi.splash.common.http.impl;
 
 import com.maicon.mytaxi.splash.common.http.IRequest;
 import com.google.gson.Gson;
+import com.maicon.mytaxi.splash.common.http.api.API;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +23,8 @@ public class BaseRequest implements IRequest{
         this.url = url;
         this.header = new HashMap<>();
         this.body = new HashMap<>();
-        header.put("Application-Id","myTaxiID");
-        header.put("API-Key","myTaxiKey");
+        header.put("X-Bmob-Application-Id", API.Config.getAppId());
+        header.put("X-Bmob-REST-API-Key",API.Config.getAppKey());
     }
 
     @Override

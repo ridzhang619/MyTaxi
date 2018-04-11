@@ -10,6 +10,7 @@ import com.maicon.mytaxi.splash.common.http.IResponse;
 public class BaseResponse implements IResponse{
 
     public static final int STATE_UNKNOWN_ERROR = 100001;
+    public static final int STATE_OK = 200;
     //相应数据
     private String data;
     //状态码
