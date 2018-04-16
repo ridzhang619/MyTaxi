@@ -8,9 +8,15 @@ public class API {
 
     public static final String TEST_GET = "/get?uid=${uid}";
     public static final String TEST_POST = "/post";
-
+    //获取验证码
     public static final String GET_SMS_CODE = "/f34e28da5816433d/getMsgCode?phone=${phone}";
+    //校验验证码
     public static final String CHECK_SMS_CODE = "/f34e28da5816433d/checkMsgCode?phone=${phone}&code=${code}";
+    //检查用户名是否存在
+    public static final String CHECK_USER_EXIST = "/f34e28da5816433d/isUserExist?phone=${phone}";
+    //注册
+    public static final String REGISTER = "/f34e28da5816433d/register";
+
 
     public static class Config{
         private static final String TEST_DOMAIN = "http://cloud.bmob.cn";

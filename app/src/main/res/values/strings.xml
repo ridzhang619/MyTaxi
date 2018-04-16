@@ -7,6 +7,14 @@
     <string name="btn_next">下一步</string>
     <string name="template_text">正在向%s发送短信验证码</string>
     <string name="count_format_text">秒后重新发送</string>
+    <string name="error_server">服务器繁忙</string>
+    <string name="input_pw_text">输入密码</string>
+    <string name="pw_hint_text">请输入密码</string>
+    <string name="pw_hint_text_again">请再次输入密码</string>
+    <string name="btn_confirm">确认</string>
+    <string name="pw_not_null">密码不能为空</string>
+    <string name="pw_confirm_diff">两次输入密码不一样</string>
+
 
 
 </resources>

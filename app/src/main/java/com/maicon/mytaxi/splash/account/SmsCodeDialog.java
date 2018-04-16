@@ -40,6 +40,10 @@ public class SmsCodeDialog extends Dialog{
     public static final int SMS_SEND_FAIL = -1;
     private static final int SMS_CHECK_SUCCESS = 2;
     private static final int SMS_CHECK_FAIL = -2;
+    private static final int USER_EXIST = 3;
+    private static final int USER_NOT_EXIST = -3;
+    private static final int SMS_SERVER_FAIL = 100;
+
 
 
     private String mPhone;
@@ -100,6 +104,15 @@ public class SmsCodeDialog extends Dialog{
                     break;
                 case SMS_CHECK_FAIL:
                     dialog.showVerifyState(false);
+                    break;
+                case USER_EXIST:
+                    dialog.showUserExist(true);
+                    break;
+                case USER_NOT_EXIST:
+                    dialog.showUserExist(false);
+                    break;
+                case SMS_SERVER_FAIL:
+                    Toast.makeText(dialog.getContext(), dialog.getContext().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
                     break;
 
 
@@ -269,6 +282,33 @@ public class SmsCodeDialog extends Dialog{
         if(success){
             mErrorView.setVisibility(View.GONE);
             mLoading.setVisibility(View.VISIBLE);
+            // 检查用户是否存在
+            new Thread(){
+
+                @Override
+                public void run() {
+                    String url = API.Config.getDomain() + API.CHECK_USER_EXIST;
+                    Log.d(TAG,url);
+
+                    IRequest request = new BaseRequest(url);
+                    request.setBody("phone",mPhone);
+                    IResponse response = mHttpClient.get(request, false);
+                    Log.d(TAG,"response :" + response.getData());
+
+                    if(response.getCode() == BaseResponse.STATE_OK){
+                        BaseBizResponse bizResponse =
+                                new Gson().fromJson(response.getData(), BaseBizResponse.class);
+                        if(bizResponse.getCode() == BaseBizResponse.STATE_USER_EXIST){
+                            mSmsCodeHandler.sendEmptyMessage(USER_EXIST);
+                        }else{
+                            mSmsCodeHandler.sendEmptyMessage(USER_NOT_EXIST);
+                        }
+                    }else{
+                        mSmsCodeHandler.sendEmptyMessage(SMS_SERVER_FAIL);
+                    }
+
+                }
+            }.start();
 
         }else{
             // 提示验证码错误
@@ -276,6 +316,19 @@ public class SmsCodeDialog extends Dialog{
             mVerificationCodeInput.setEnabled(true);
             mLoading.setVisibility(View.GONE);
         }
+
     }
+
+    private void showUserExist(boolean exist){
+        mLoading.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.GONE);
+        dismiss();
+        if(!exist){
+            //用户不存在,进入注册
+        }else{
+            //用户存在,进入登录
+        }
+    }
+
 
 }

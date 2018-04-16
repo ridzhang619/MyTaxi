@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_close"
+            android:layout_alignParentRight="true"
+            android:padding="16dp"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="64dp"
+        >
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/input_pw_text"
+            style="@style/Dialog.Title"
+            android:gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="你的手机号为:"
+            style="@style/Dialog.Input"
+            android:gravity="center_horizontal"/>
+
+        <EditText
+            android:id="@+id/pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pw_hint_text"
+            style="@style/Dialog.Input"
+            android:inputType="textPassword"/>
+        <EditText
+            android:id="@+id/pw1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pw_hint_text_again"
+            style="@style/Dialog.Input"
+            android:inputType="textPassword"/>
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Loading"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="错误"
+            android:gravity="center"
+            android:textColor="@color/error_red"
+            android:visibility="gone"
+            android:padding="12dp"
+            style="@style/Tips"
+            />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_next"
+            style="@style/Dialog.Button"
+            />
+
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
