@@ -1,14 +1,11 @@
-package com.maicon.mytaxi.splash.account;
+package com.maicon.mytaxi.splash.account.view;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
-import android.text.style.CharacterStyle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;

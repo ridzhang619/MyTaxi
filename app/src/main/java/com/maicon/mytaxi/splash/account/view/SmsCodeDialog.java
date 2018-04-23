@@ -1,4 +1,4 @@
-package com.maicon.mytaxi.splash.account;
+package com.maicon.mytaxi.splash.account.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -161,32 +161,7 @@ public class SmsCodeDialog extends Dialog{
      */
     private void requestSendSmsCode() {
 
-        new Thread(){
 
-            @Override
-            public void run() {
-                String url = API.Config.getDomain() + API.GET_SMS_CODE;
-                Log.d(TAG,url);
-
-                IRequest request = new BaseRequest(url);
-                request.setBody("phone",mPhone);
-                IResponse response = mHttpClient.get(request, false);
-                Log.d(TAG,"response :" + response.getData());
-
-                if(response.getCode() == BaseResponse.STATE_OK){
-                    BaseBizResponse bizResponse =
-                     new Gson().fromJson(response.getData(), BaseBizResponse.class);
-                    if(bizResponse.getCode() == BaseBizResponse.STATE_OK){
-                            mSmsCodeHandler.sendEmptyMessage(SMS_SEND_SUCCESS);
-                    }else{
-                        mSmsCodeHandler.sendEmptyMessage(SMS_SEND_FAIL);
-                    }
-                }else{
-                    mSmsCodeHandler.sendEmptyMessage(SMS_SEND_FAIL);
-                }
-
-            }
-        }.start();
 
     }
 
@@ -237,34 +212,7 @@ public class SmsCodeDialog extends Dialog{
         showLoading();
         // 网络请求校验验证码
 
-        new Thread(){
 
-            @Override
-            public void run() {
-                String url = API.Config.getDomain() + API.CHECK_SMS_CODE;
-                Log.d(TAG,url);
-
-                IRequest request = new BaseRequest(url);
-                request.setBody("phone",mPhone);
-                request.setBody("code",code);
-
-                IResponse response = mHttpClient.get(request, false);
-                Log.d(TAG,"response :" + response.getData());
-
-                if(response.getCode() == BaseResponse.STATE_OK){
-                    BaseBizResponse bizResponse =
-                            new Gson().fromJson(response.getData(), BaseBizResponse.class);
-                    if(bizResponse.getCode() == BaseBizResponse.STATE_OK){
-                        mSmsCodeHandler.sendEmptyMessage(SMS_CHECK_SUCCESS);
-                    }else{
-                        mSmsCodeHandler.sendEmptyMessage(SMS_CHECK_FAIL);
-                    }
-                }else{
-                    mSmsCodeHandler.sendEmptyMessage(SMS_CHECK_FAIL);
-                }
-
-            }
-        }.start();
 
 
     }
@@ -283,32 +231,7 @@ public class SmsCodeDialog extends Dialog{
             mErrorView.setVisibility(View.GONE);
             mLoading.setVisibility(View.VISIBLE);
             // 检查用户是否存在
-            new Thread(){
 
-                @Override
-                public void run() {
-                    String url = API.Config.getDomain() + API.CHECK_USER_EXIST;
-                    Log.d(TAG,url);
-
-                    IRequest request = new BaseRequest(url);
-                    request.setBody("phone",mPhone);
-                    IResponse response = mHttpClient.get(request, false);
-                    Log.d(TAG,"response :" + response.getData());
-
-                    if(response.getCode() == BaseResponse.STATE_OK){
-                        BaseBizResponse bizResponse =
-                                new Gson().fromJson(response.getData(), BaseBizResponse.class);
-                        if(bizResponse.getCode() == BaseBizResponse.STATE_USER_EXIST){
-                            mSmsCodeHandler.sendEmptyMessage(USER_EXIST);
-                        }else{
-                            mSmsCodeHandler.sendEmptyMessage(USER_NOT_EXIST);
-                        }
-                    }else{
-                        mSmsCodeHandler.sendEmptyMessage(SMS_SERVER_FAIL);
-                    }
-
-                }
-            }.start();
 
         }else{
             // 提示验证码错误
@@ -325,8 +248,12 @@ public class SmsCodeDialog extends Dialog{
         dismiss();
         if(!exist){
             //用户不存在,进入注册
+            CreatePasswordDialog dialog =  new CreatePasswordDialog(getContext(),mPhone);
+            dialog.show();
         }else{
             //用户存在,进入登录
+            LoginDialog dialog = new LoginDialog(getContext(),mPhone);
+            dialog.show();
         }
     }
 

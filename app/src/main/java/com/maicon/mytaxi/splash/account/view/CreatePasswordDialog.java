@@ -1,4 +1,4 @@
-package com.maicon.mytaxi.splash.account;
+package com.maicon.mytaxi.splash.account.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,24 +7,30 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.maicon.mytaxi.R;
+import com.maicon.mytaxi.splash.MyApplication;
+import com.maicon.mytaxi.splash.account.model.response.Account;
+import com.maicon.mytaxi.splash.account.model.response.LoginResponse;
 import com.maicon.mytaxi.splash.common.http.IHttpClient;
 import com.maicon.mytaxi.splash.common.http.IRequest;
+import com.maicon.mytaxi.splash.common.http.IResponse;
 import com.maicon.mytaxi.splash.common.http.api.API;
+import com.maicon.mytaxi.splash.common.http.biz.BaseBizResponse;
 import com.maicon.mytaxi.splash.common.http.impl.BaseRequest;
 import com.maicon.mytaxi.splash.common.http.impl.OkHttpClientImpl;
+import com.maicon.mytaxi.splash.common.storage.SharedPreferencesDao;
 import com.maicon.mytaxi.splash.common.utils.DevUtil;
 
 import java.lang.ref.SoftReference;
-import java.util.logging.LogRecord;
 
 /**
  * Created by Maicon on 2018/4/16 0016.
@@ -35,6 +41,7 @@ public class CreatePasswordDialog extends Dialog{
     private static final String TAG = "CreatePasswordDialog";
     private static final int REGISTER_SUCCESS = 1;
     private static final int SERVER_FAIL = 100;
+    private static final int LOGIN_SUCCESS = 2;
     private TextView mTitle;
     private TextView mPhone;
     private EditText mPw;
@@ -66,16 +73,70 @@ public class CreatePasswordDialog extends Dialog{
 
             switch(msg.what){
                 case REGISTER_SUCCESS:
-
+                    dialog.showRegisterSuccess();
                     break;
                 case SERVER_FAIL:
                     Toast.makeText(dialog.getContext(), dialog.getContext().getString(R.string.error_server), Toast.LENGTH_SHORT).show();
                     break;
+                case LOGIN_SUCCESS:
+                    dialog.showLoginSuccess();
+                    break;
+
             }
 
         }
+
+
     }
 
+    /**
+     * 处理登录成功
+     */
+    private void showLoginSuccess() {
+        dismiss();
+        Toast.makeText(getContext(), getContext().getResources().getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 处理注册成功
+     */
+    private void showRegisterSuccess() {
+        mLoading.setVisibility(View.VISIBLE);
+        mBtnCofirm.setVisibility(View.GONE);
+        mTips.setVisibility(View.VISIBLE);
+        mTips.setTextColor(getContext().getResources().getColor(R.color.color_text_normal));
+        mTips.setText(getContext().getResources().getString(R.string.auto_login));
+        //登录
+        new Thread(){
+            @Override
+            public void run() {
+                String url = API.Config.getDomain() + API.REGISTER;
+                IRequest request = new BaseRequest(url);
+                request.setBody("phone",mPhoneStr);
+                request.setBody("password",mPw.getText().toString());
+                IResponse response = mHttpClient.post(request,false);
+                Log.d(TAG,"response is :"+response.getData());
+                if(response.getCode() == BaseBizResponse.STATE_OK){
+                    LoginResponse bizResponse =
+                            new Gson().fromJson(response.getData(),LoginResponse.class);
+                    if(bizResponse.getCode() == BaseBizResponse.STATE_OK){
+                        //保存登录信息
+                        Account account = bizResponse.getData();
+                        SharedPreferencesDao dao =
+                                new SharedPreferencesDao(MyApplication.getInstance(), SharedPreferencesDao.FILE_ACCOUNT);
+                        dao.save(SharedPreferencesDao.KEY_ACCOUNT,account);
+                        //通知
+                        mHandler.sendEmptyMessage(LOGIN_SUCCESS);
+                    }else{
+                        mHandler.sendEmptyMessage(SERVER_FAIL);
+                    }
+                }else{
+                    mHandler.sendEmptyMessage(SERVER_FAIL);
+                }
+            }
+        }.start();
+
+    }
 
 
 
@@ -137,16 +198,7 @@ public class CreatePasswordDialog extends Dialog{
             final String password = mPw.getText().toString();
             final String phone = mPhoneStr;
             //请求网络,提交注册
-            new Thread(){
-                @Override
-                public void run() {
-                    String url = API.Config.getDomain() + API.REGISTER;
-                    IRequest request = new BaseRequest(url);
-                    request.setBody("phone",phone);
-                    request.setBody("password",password);
-                    request.setBody("uid", DevUtil.UUID(getContext()));
-                }
-            }.start();
+
         }
     }
 

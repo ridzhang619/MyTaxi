@@ -16,6 +16,10 @@ public class API {
     public static final String CHECK_USER_EXIST = "/f34e28da5816433d/isUserExist?phone=${phone}";
     //注册
     public static final String REGISTER = "/f34e28da5816433d/register";
+    //登录
+    public static final String LOGIN  = "/f34e28da5816433d/auth";
+    //token自动登录
+    public static final String LOGIN_BY_TOKEN = "/f34e28da5816433d/login";
 
 
     public static class Config{
